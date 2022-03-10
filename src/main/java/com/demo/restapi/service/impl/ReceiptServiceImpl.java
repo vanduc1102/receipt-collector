@@ -3,16 +3,15 @@ package com.demo.restapi.service.impl;
 import com.demo.restapi.exception.RestapiException;
 import com.demo.restapi.exception.ResourceNotFoundException;
 import com.demo.restapi.model.Bill;
-import com.demo.restapi.model.Media;
 import com.demo.restapi.model.User;
-import com.demo.restapi.payload.BillResponse;
+import com.demo.restapi.payload.ReceiptResponse;
 import com.demo.restapi.payload.ApiResponse;
 import com.demo.restapi.payload.PagedResponse;
 import com.demo.restapi.payload.request.BillRequest;
 import com.demo.restapi.repository.BillRepository;
 import com.demo.restapi.repository.UserRepository;
 import com.demo.restapi.security.UserPrincipal;
-import com.demo.restapi.service.BillService;
+import com.demo.restapi.service.ReceiptService;
 import com.demo.restapi.utils.AppUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -32,7 +30,7 @@ import java.util.List;
 import static com.demo.restapi.utils.AppConstants.ID;
 
 @Service
-public class BillServiceImpl implements BillService{
+public class ReceiptServiceImpl implements ReceiptService {
 
     private static final String CREATED_AT = "createdAt";
 
@@ -50,7 +48,7 @@ public class BillServiceImpl implements BillService{
     private ModelMapper modelMapper;
 
     @Override
-    public PagedResponse<BillResponse> getAllBills(int page, int size) {
+    public PagedResponse<ReceiptResponse> getAllBills(int page, int size) {
         AppUtils.validatePageNumberAndSize(page, size);
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, CREATED_AT);
         Page<Bill> bills = billRepository.findAll(pageable);
@@ -59,9 +57,9 @@ public class BillServiceImpl implements BillService{
                     bills.getTotalPages(), bills.isLast());
         }
 
-        List<BillResponse> billResponses = Arrays.asList(modelMapper.map(bills.getContent(), BillResponse[].class));
+        List<ReceiptResponse> receiptRespons = Arrays.asList(modelMapper.map(bills.getContent(), ReceiptResponse[].class));
 
-        return new PagedResponse<>(billResponses, bills.getNumber(), bills.getSize(), bills.getTotalElements(), bills.getTotalPages(),
+        return new PagedResponse<>(receiptRespons, bills.getNumber(), bills.getSize(), bills.getTotalElements(), bills.getTotalPages(),
                 bills.isLast());
     }
 
@@ -84,8 +82,21 @@ public class BillServiceImpl implements BillService{
     }
 
     @Override
-    public ResponseEntity<BillResponse> updateBill(Long id, BillRequest newBill, UserPrincipal currentUser) {
-        return null;
+    public ResponseEntity<ReceiptResponse> updateBill(Long id, BillRequest newBill, UserPrincipal currentUser) {
+        Bill bill = billRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(BILL_STR, ID, id));
+        User user = userRepository.getUser(currentUser);
+        if (bill.getUser().getId().equals(user.getId())) {
+            bill.setTitle(newBill.getTitle());
+            Bill updatedBill = billRepository.save(bill);
+
+            ReceiptResponse receiptResponse = new ReceiptResponse();
+
+            modelMapper.map(updatedBill, receiptResponse);
+
+            return new ResponseEntity<>(receiptResponse, HttpStatus.OK);
+        }
+
+        throw new RestapiException(HttpStatus.UNAUTHORIZED, YOU_DON_T_HAVE_PERMISSION_TO_MAKE_THIS_OPERATION);
     }
 
     @Override

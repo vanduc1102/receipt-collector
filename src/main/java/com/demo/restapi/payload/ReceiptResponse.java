@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.demo.restapi.model.Media;
 import com.demo.restapi.model.User;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,7 +12,7 @@ import java.util.List;
 
 @Data
 @JsonInclude(Include.NON_NULL)
-public class BillResponse{
+public class ReceiptResponse {
     private Long id;
 
     private String title;
