@@ -4,8 +4,8 @@ import com.demo.restapi.exception.RestapiException;
 import com.demo.restapi.model.User;
 import com.demo.restapi.payload.ApiResponse;
 import com.demo.restapi.payload.JwtAuthenticationResponse;
-import com.demo.restapi.payload.LoginRequest;
-import com.demo.restapi.payload.SignUpRequest;
+import com.demo.restapi.payload.request.LoginRequest;
+import com.demo.restapi.payload.request.SignUpRequest;
 import com.demo.restapi.repository.UserRepository;
 import com.demo.restapi.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")

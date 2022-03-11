@@ -9,11 +9,13 @@ import java.util.Collections;
 import java.util.List;
 
 @Data
-public class BillRequest {
+public class ReceiptRequest {
 
     private Long id;
 
     private String title;
+
+    private String description;
 
     private User user;
 

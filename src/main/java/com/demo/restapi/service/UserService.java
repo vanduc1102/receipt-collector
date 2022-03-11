@@ -1,8 +1,6 @@
 package com.demo.restapi.service;
 
 import com.demo.restapi.model.User;
-import com.demo.restapi.payload.ApiResponse;
-import com.demo.restapi.payload.InfoRequest;
 import com.demo.restapi.payload.UserIdentityAvailability;
 import com.demo.restapi.payload.UserProfile;
 import com.demo.restapi.payload.UserSummary;

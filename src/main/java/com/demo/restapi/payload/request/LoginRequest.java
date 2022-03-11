@@ -1,4 +1,4 @@
-package com.demo.restapi.payload;
+package com.demo.restapi.payload.request;
 
 import lombok.Data;
 

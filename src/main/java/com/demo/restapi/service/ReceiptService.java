@@ -1,18 +1,18 @@
 package com.demo.restapi.service;
 
-import com.demo.restapi.model.Bill;
+import com.demo.restapi.model.Receipt;
 import com.demo.restapi.payload.ReceiptResponse;
 import com.demo.restapi.payload.ApiResponse;
 import com.demo.restapi.payload.PagedResponse;
-import com.demo.restapi.payload.request.BillRequest;
+import com.demo.restapi.payload.request.ReceiptRequest;
 import com.demo.restapi.security.UserPrincipal;
 import org.springframework.http.ResponseEntity;
 
 public interface ReceiptService {
-    PagedResponse<ReceiptResponse> getAllBills(int page, int size);
-    ResponseEntity<Bill> addBill(BillRequest billRequest, UserPrincipal currentUser);
-    ResponseEntity<Bill> getBill(Long id);
-    ResponseEntity<ReceiptResponse> updateBill(Long id, BillRequest newBill, UserPrincipal currentUser);
-    ResponseEntity<ApiResponse> deleteBill(Long id, UserPrincipal currentUser);
-    PagedResponse<Bill> getUserBills(String username, int page, int size);
+    PagedResponse<ReceiptResponse> getAllReceipts(int page, int size);
+    ResponseEntity<Receipt> addReceipt(ReceiptRequest receiptRequest, UserPrincipal currentUser);
+    ResponseEntity<Receipt> getReceipt(Long id);
+    ResponseEntity<ReceiptResponse> updateReceipt(Long id, ReceiptRequest newBill, UserPrincipal currentUser);
+    ResponseEntity<ApiResponse> deleteReceipt(Long id, UserPrincipal currentUser);
+    PagedResponse<Receipt> getUserReceipts(String username, int page, int size);
 }

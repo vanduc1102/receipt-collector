@@ -1,28 +1,17 @@
 package com.demo.restapi.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.demo.restapi.model.audit.UserDateAudit;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import org.hibernate.Hibernate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
+@Table(name="medias")
 @Data
-@NoArgsConstructor
-@Table(name = "medias")
 public class Media extends UserDateAudit{
     private static final long serialVersionUID = 1L;
 
@@ -35,16 +24,34 @@ public class Media extends UserDateAudit{
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bill_id")
-    private Bill bill;
+    @JoinColumn(name = "receipt_id")
+    @ToString.Exclude
+    private Receipt receipt;
 
-    public Media(@NotBlank String url, Bill bill) {
+    public Media(@NotBlank String url, Receipt receipt) {
         this.url = url;
-        this.bill = bill;
+        this.receipt = receipt;
+    }
+
+    public Media() {
+
     }
 
     @JsonIgnore
-    public Bill getBill() {
-        return bill;
+    public Receipt getReceipt() {
+        return receipt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Media media = (Media) o;
+        return id != null && Objects.equals(id, media.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

@@ -1,33 +1,23 @@
 package com.demo.restapi.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.demo.restapi.model.audit.UserDateAudit;
-import com.demo.restapi.model.User;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
+import org.hibernate.Hibernate;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
-@EqualsAndHashCode(callSuper = true)
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
 @Entity
+@Table(name="receipts")
 @Data
-@Table(name = "bills")
-public class Bill extends UserDateAudit {
+public class Receipt extends UserDateAudit {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -46,7 +36,7 @@ public class Bill extends UserDateAudit {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Media> media;
 
     @JsonIgnore
@@ -54,11 +44,11 @@ public class Bill extends UserDateAudit {
         return user;
     }
 
-    public List<Media> getPhoto() {
+    public List<Media> getMedia() {
         return this.media == null ? null : new ArrayList<>(this.media);
     }
 
-    public void setPhoto(List<Media> media) {
+    public void setMedia(List<Media> media) {
         if (media == null) {
             this.media = null;
         } else {

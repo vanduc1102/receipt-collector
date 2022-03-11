@@ -2,13 +2,13 @@ package com.demo.restapi.service.impl;
 
 import com.demo.restapi.exception.RestapiException;
 import com.demo.restapi.exception.ResourceNotFoundException;
-import com.demo.restapi.model.Bill;
+import com.demo.restapi.model.Receipt;
 import com.demo.restapi.model.User;
 import com.demo.restapi.payload.ReceiptResponse;
 import com.demo.restapi.payload.ApiResponse;
 import com.demo.restapi.payload.PagedResponse;
-import com.demo.restapi.payload.request.BillRequest;
-import com.demo.restapi.repository.BillRepository;
+import com.demo.restapi.payload.request.ReceiptRequest;
+import com.demo.restapi.repository.ReceiptRepository;
 import com.demo.restapi.repository.UserRepository;
 import com.demo.restapi.security.UserPrincipal;
 import com.demo.restapi.service.ReceiptService;
@@ -34,12 +34,12 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     private static final String CREATED_AT = "createdAt";
 
-    private static final String BILL_STR = "Bill";
+    private static final String RECEIPT_STR = "Bill";
 
     private static final String YOU_DON_T_HAVE_PERMISSION_TO_MAKE_THIS_OPERATION = "You don't have permission to make this operation";
 
     @Autowired
-    private BillRepository billRepository;
+    private ReceiptRepository receiptRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -48,50 +48,51 @@ public class ReceiptServiceImpl implements ReceiptService {
     private ModelMapper modelMapper;
 
     @Override
-    public PagedResponse<ReceiptResponse> getAllBills(int page, int size) {
+    public PagedResponse<ReceiptResponse> getAllReceipts(int page, int size) {
         AppUtils.validatePageNumberAndSize(page, size);
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, CREATED_AT);
-        Page<Bill> bills = billRepository.findAll(pageable);
-        if (bills.getNumberOfElements() == 0) {
-            return new PagedResponse<>(Collections.emptyList(), bills.getNumber(), bills.getSize(), bills.getTotalElements(),
-                    bills.getTotalPages(), bills.isLast());
+        Page<Receipt> receipts = receiptRepository.findAll(pageable);
+        if (receipts.getNumberOfElements() == 0) {
+            return new PagedResponse<>(Collections.emptyList(), receipts.getNumber(), receipts.getSize(), receipts.getTotalElements(),
+                    receipts.getTotalPages(), receipts.isLast());
         }
 
-        List<ReceiptResponse> receiptRespons = Arrays.asList(modelMapper.map(bills.getContent(), ReceiptResponse[].class));
+        List<ReceiptResponse> receiptResponse = Arrays.asList(modelMapper.map(receipts.getContent(), ReceiptResponse[].class));
 
-        return new PagedResponse<>(receiptRespons, bills.getNumber(), bills.getSize(), bills.getTotalElements(), bills.getTotalPages(),
-                bills.isLast());
+        return new PagedResponse<>(receiptResponse, receipts.getNumber(), receipts.getSize(), receipts.getTotalElements(), receipts.getTotalPages(),
+                receipts.isLast());
     }
 
     @Override
-    public ResponseEntity<Bill> addBill(BillRequest billRequest, UserPrincipal currentUser) {
+    public ResponseEntity<Receipt> addReceipt(ReceiptRequest receiptRequest, UserPrincipal currentUser) {
         User user = userRepository.getUser(currentUser);
 
-        Bill bill = new Bill();
+        Receipt receipt = new Receipt();
 
-        modelMapper.map(billRequest, bill);
+        modelMapper.map(receiptRequest, receipt);
 
-        bill.setUser(user);
-        Bill newBill = billRepository.save(bill);
-        return new ResponseEntity<>(newBill, HttpStatus.CREATED);
+        receipt.setUser(user);
+        Receipt newReceipt = receiptRepository.save(receipt);
+        return new ResponseEntity<>(newReceipt, HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<Bill> getBill(Long id) {
-        return null;
+    public ResponseEntity<Receipt> getReceipt(Long id) {
+        Receipt receipt = receiptRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(RECEIPT_STR, ID, id));
+        return new ResponseEntity<>(receipt, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<ReceiptResponse> updateBill(Long id, BillRequest newBill, UserPrincipal currentUser) {
-        Bill bill = billRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(BILL_STR, ID, id));
+    public ResponseEntity<ReceiptResponse> updateReceipt(Long id, ReceiptRequest newBill, UserPrincipal currentUser) {
+        Receipt receipt = receiptRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(RECEIPT_STR, ID, id));
         User user = userRepository.getUser(currentUser);
-        if (bill.getUser().getId().equals(user.getId())) {
-            bill.setTitle(newBill.getTitle());
-            Bill updatedBill = billRepository.save(bill);
+        if (receipt.getUser().getId().equals(user.getId())) {
+            receipt.setTitle(newBill.getTitle());
+            Receipt updatedReceipt = receiptRepository.save(receipt);
 
             ReceiptResponse receiptResponse = new ReceiptResponse();
 
-            modelMapper.map(updatedBill, receiptResponse);
+            modelMapper.map(updatedReceipt, receiptResponse);
 
             return new ResponseEntity<>(receiptResponse, HttpStatus.OK);
         }
@@ -100,12 +101,12 @@ public class ReceiptServiceImpl implements ReceiptService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> deleteBill(Long id, UserPrincipal currentUser) {
+    public ResponseEntity<ApiResponse> deleteReceipt(Long id, UserPrincipal currentUser) {
         return null;
     }
 
     @Override
-    public PagedResponse<Bill> getUserBills(String username, int page, int size) {
+    public PagedResponse<Receipt> getUserReceipts(String username, int page, int size) {
         return null;
     }
 }

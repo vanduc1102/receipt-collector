@@ -1,13 +1,9 @@
 package com.demo.restapi.service.impl;
 
-import com.demo.restapi.exception.AccessDeniedException;
-import com.demo.restapi.exception.AppException;
 import com.demo.restapi.exception.BadRequestException;
-import com.demo.restapi.exception.ResourceNotFoundException;
 import com.demo.restapi.exception.UnauthorizedException;
 import com.demo.restapi.model.User;
 import com.demo.restapi.payload.ApiResponse;
-import com.demo.restapi.payload.InfoRequest;
 import com.demo.restapi.payload.UserIdentityAvailability;
 import com.demo.restapi.payload.UserProfile;
 import com.demo.restapi.payload.UserSummary;
@@ -15,13 +11,8 @@ import com.demo.restapi.repository.UserRepository;
 import com.demo.restapi.security.UserPrincipal;
 import com.demo.restapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
