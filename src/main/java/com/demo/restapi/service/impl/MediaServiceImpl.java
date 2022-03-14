@@ -12,6 +12,7 @@ import com.demo.restapi.repository.MediaRepository;
 import com.demo.restapi.repository.ReceiptRepository;
 import com.demo.restapi.security.UserPrincipal;
 import com.demo.restapi.service.MediaService;
+import com.demo.restapi.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +36,9 @@ public class MediaServiceImpl implements MediaService {
     @Autowired
     private ReceiptRepository receiptRepository;
 
+    @Autowired
+    private StorageService storageService;
+
     @Override
     public PagedResponse<MediaResponse> getAllMedias(int page, int size) {
         return null;
@@ -55,9 +59,10 @@ public class MediaServiceImpl implements MediaService {
         Receipt receipt = receiptRepository.findById(mediaRequest.getReceiptId())
                 .orElseThrow(() -> new ResourceNotFoundException(MEDIA, ID, mediaRequest.getReceiptId()));
         if (receipt.getUser().getId().equals(currentUser.getId())) {
-            Media media = new Media(mediaRequest.getUrl(), receipt);
+            Media media = new Media(mediaRequest.getFileName(), mediaRequest.getKeyName(), receipt);
             Media newMedia = mediaRepository.save(media);
-            return new MediaResponse(newMedia.getId(), newMedia.getUrl(), newMedia.getReceipt().getId());
+            return new MediaResponse(newMedia.getId(), media.getKeyName(),
+                    storageService.findByName(media.getKeyName()), newMedia.getReceipt().getId());
         }
 
         ApiResponse apiResponse = new ApiResponse(Boolean.FALSE, "You don't have permission to add photo in this receipt");
@@ -80,7 +85,8 @@ public class MediaServiceImpl implements MediaService {
 
         List<MediaResponse> photoResponses = new ArrayList<>(medias.getContent().size());
         for (Media media : medias.getContent()) {
-            photoResponses.add(new MediaResponse(media.getId(), media.getUrl(), media.getReceipt().getId()));
+            photoResponses.add(new MediaResponse(media.getId(), media.getKeyName(),
+                    storageService.findByName(media.getKeyName()), media.getReceipt().getId()));
         }
         return new PagedResponse<>(photoResponses, medias.getNumber(), medias.getSize(), medias.getTotalElements(),
                 medias.getTotalPages(), medias.isLast());

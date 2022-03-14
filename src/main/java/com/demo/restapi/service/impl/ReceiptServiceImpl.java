@@ -80,7 +80,7 @@ public class ReceiptServiceImpl implements ReceiptService {
         receipt.setUser(user);
         Receipt newReceipt = receiptRepository.save(receipt);
         for (MediaRequest mediaRequest : mediaRequests){
-            Media media = new Media(mediaRequest.getUrl(), receipt);
+            Media media = new Media(mediaRequest.getFileName(), mediaRequest.getKeyName(), receipt);
             mediaRepository.save(media);
         }
         return new ResponseEntity<>(newReceipt, HttpStatus.CREATED);

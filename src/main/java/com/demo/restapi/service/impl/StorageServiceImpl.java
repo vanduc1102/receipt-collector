@@ -2,6 +2,7 @@ package com.demo.restapi.service.impl;
 
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
+import com.demo.restapi.payload.MediaUploadResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +43,8 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public String generatePresignedUrl(String extension) {
+    public MediaUploadResponse generatePresignedUrl(String extension) {
         String fileName = UUID.randomUUID().toString() + '.' + extension;
-        return generateUrl(fileName, HttpMethod.PUT);
+        return new MediaUploadResponse(fileName, generateUrl(fileName, HttpMethod.PUT));
     }
 }

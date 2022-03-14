@@ -1,6 +1,7 @@
 package com.demo.restapi.controller;
 
 import com.demo.restapi.payload.ApiResponse;
+import com.demo.restapi.payload.MediaUploadResponse;
 import com.demo.restapi.payload.PagedResponse;
 import com.demo.restapi.payload.request.MediaRequest;
 import com.demo.restapi.payload.MediaResponse;
@@ -50,8 +51,13 @@ public class MediaController {
         return new ResponseEntity< >(mediaResponse, HttpStatus.OK);
     }
 
+    @GetMapping("/get-file-url")
+    public ResponseEntity<Object> getFileUrl(@RequestParam("fileName") String fileName) {
+        return new ResponseEntity<>(storageService.findByName(fileName), HttpStatus.OK);
+    }
+
     @GetMapping("/get-presign-url")
-    public ResponseEntity<Object> generatePresignUrl(@RequestParam("extension") String extension) {
+    public ResponseEntity<MediaUploadResponse> generatePresignUrl(@RequestParam("extension") String extension) {
         return new ResponseEntity<>(storageService.generatePresignedUrl(extension), HttpStatus.OK);
     }
 

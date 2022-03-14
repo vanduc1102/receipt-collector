@@ -9,8 +9,10 @@ import javax.validation.constraints.Size;
 public class MediaRequest {
 
     @NotBlank
-    @Size(min = 10)
-    private String url;
+    private String fileName;
+
+    @NotBlank
+    private String keyName;
 
     private Long receiptId;
 }

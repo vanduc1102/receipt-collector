@@ -1,5 +1,6 @@
 package com.demo.restapi.service;
 
+import com.demo.restapi.payload.MediaUploadResponse;
 import org.springframework.scheduling.annotation.Async;
 
 public interface StorageService {
@@ -8,5 +9,5 @@ public interface StorageService {
     String findByName(String fileName);
 
     @Async
-    String generatePresignedUrl(String extension);
+    MediaUploadResponse generatePresignedUrl(String extension);
 }

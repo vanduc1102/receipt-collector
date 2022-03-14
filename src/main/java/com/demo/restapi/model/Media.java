@@ -1,9 +1,11 @@
 package com.demo.restapi.model;
 
 import com.demo.restapi.model.audit.UserDateAudit;
+import com.demo.restapi.service.StorageService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -20,16 +22,21 @@ public class Media extends UserDateAudit{
     private Long id;
 
     @NotBlank
-    @Column(name = "url")
-    private String url;
+    @Column(name = "file_name")
+    private String fileName;
+
+    @NotBlank
+    @Column(name = "key_name")
+    private String keyName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receipt_id")
     @ToString.Exclude
     private Receipt receipt;
 
-    public Media(@NotBlank String url, Receipt receipt) {
-        this.url = url;
+    public Media(@NotBlank String fileName, @NotBlank String keyName, Receipt receipt) {
+        this.fileName = fileName;
+        this.keyName = keyName;
         this.receipt = receipt;
     }
 
