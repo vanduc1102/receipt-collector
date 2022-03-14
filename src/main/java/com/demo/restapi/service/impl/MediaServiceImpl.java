@@ -17,15 +17,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import com.demo.restapi.utils.AppUtils;
 import com.demo.restapi.utils.AppConstants;
-import static com.demo.restapi.utils.AppConstants.CREATED_AT;
 import static com.demo.restapi.utils.AppConstants.ID;
 import static com.demo.restapi.utils.AppConstants.MEDIA;
 

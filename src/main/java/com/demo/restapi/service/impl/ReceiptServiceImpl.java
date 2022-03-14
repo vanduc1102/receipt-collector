@@ -2,12 +2,15 @@ package com.demo.restapi.service.impl;
 
 import com.demo.restapi.exception.RestapiException;
 import com.demo.restapi.exception.ResourceNotFoundException;
+import com.demo.restapi.model.Media;
 import com.demo.restapi.model.Receipt;
 import com.demo.restapi.model.User;
 import com.demo.restapi.payload.ReceiptResponse;
 import com.demo.restapi.payload.ApiResponse;
 import com.demo.restapi.payload.PagedResponse;
+import com.demo.restapi.payload.request.MediaRequest;
 import com.demo.restapi.payload.request.ReceiptRequest;
+import com.demo.restapi.repository.MediaRepository;
 import com.demo.restapi.repository.ReceiptRepository;
 import com.demo.restapi.repository.UserRepository;
 import com.demo.restapi.security.UserPrincipal;
@@ -47,6 +50,9 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private MediaRepository mediaRepository;
+
     @Override
     public PagedResponse<ReceiptResponse> getAllReceipts(int page, int size) {
         AppUtils.validatePageNumberAndSize(page, size);
@@ -68,11 +74,15 @@ public class ReceiptServiceImpl implements ReceiptService {
         User user = userRepository.getUser(currentUser);
 
         Receipt receipt = new Receipt();
-
+        List<MediaRequest> mediaRequests = receiptRequest.getMedias();
         modelMapper.map(receiptRequest, receipt);
 
         receipt.setUser(user);
         Receipt newReceipt = receiptRepository.save(receipt);
+        for (MediaRequest mediaRequest : mediaRequests){
+            Media media = new Media(mediaRequest.getUrl(), receipt);
+            mediaRepository.save(media);
+        }
         return new ResponseEntity<>(newReceipt, HttpStatus.CREATED);
     }
 

@@ -7,6 +7,7 @@ import com.demo.restapi.payload.MediaResponse;
 import com.demo.restapi.security.CurrentUser;
 import com.demo.restapi.security.UserPrincipal;
 import com.demo.restapi.service.MediaService;
+import com.demo.restapi.service.StorageService;
 import com.demo.restapi.utils.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,9 @@ public class MediaController {
     @Autowired
     private MediaService mediaService;
 
+    @Autowired
+    private StorageService storageService;
+
     @GetMapping
     public PagedResponse<MediaResponse> getAllPhotos(
             @RequestParam(name = "page", required = false, defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) Integer page,
@@ -46,5 +50,9 @@ public class MediaController {
         return new ResponseEntity< >(mediaResponse, HttpStatus.OK);
     }
 
+    @GetMapping("/get-presign-url")
+    public ResponseEntity<Object> generatePresignUrl(@RequestParam("extension") String extension) {
+        return new ResponseEntity<>(storageService.generatePresignedUrl(extension), HttpStatus.OK);
+    }
 
 }

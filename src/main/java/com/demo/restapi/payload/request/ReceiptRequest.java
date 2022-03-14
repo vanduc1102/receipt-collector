@@ -19,19 +19,19 @@ public class ReceiptRequest {
 
     private User user;
 
-    private List<Media> media;
+    private List<MediaRequest> medias;
 
-    public List<Media> getMedia() {
+    public List<MediaRequest> getMedias() {
 
-        return media == null ? null : new ArrayList<>(media);
+        return medias == null ? null : new ArrayList<>(medias);
     }
 
-    public void setMedia(List<Media> media) {
+    public void setMedias(List<MediaRequest> media) {
 
         if (media == null) {
-            this.media = null;
+            this.medias = null;
         } else {
-            this.media = Collections.unmodifiableList(media);
+            this.medias = Collections.unmodifiableList(media);
         }
     }
 }
