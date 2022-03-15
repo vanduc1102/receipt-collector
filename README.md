@@ -31,3 +31,7 @@ docker build -t receipt-collector .
 ```
 docker run -p 8080:8080 receipt-collector
 ```
+
+# Postman collection
+
+https://www.postman.com/collections/f77475ad1b3ba084a4b3
