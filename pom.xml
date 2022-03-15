@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.demo</groupId>
-    <artifactId>rest-api</artifactId>
+    <artifactId>receipt-collector</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>rest-api</name>
-    <description>rest-api</description>
+    <name>receipt-collector</name>
+    <description>API for receipt collector</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

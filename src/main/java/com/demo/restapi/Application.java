@@ -12,11 +12,11 @@ import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
 @SpringBootApplication
-@EntityScan(basePackageClasses = { RestApiApplication.class, Jsr310Converters.class })
-public class RestApiApplication {
+@EntityScan(basePackageClasses = { Application.class, Jsr310Converters.class })
+public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(RestApiApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
 
     @PostConstruct
