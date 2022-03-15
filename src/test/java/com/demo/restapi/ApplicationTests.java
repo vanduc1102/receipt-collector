@@ -6,8 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RestApiApplicationTests.class)
-class RestApiApplicationTests {
+@SpringBootTest(classes = ApplicationTests.class)
+class ApplicationTests {
 
     @Test
     void contextLoads() {
