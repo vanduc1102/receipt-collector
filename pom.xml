@@ -160,7 +160,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <profiles>
-                        <profile>production</profile>
+                        <profile>local</profile>
                     </profiles>
                 </configuration>
             </plugin>
